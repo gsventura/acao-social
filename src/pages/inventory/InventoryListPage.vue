@@ -37,18 +37,18 @@ const categoryFilter = ref<string>('')
 const photoPreview = ref<string | null>(null)
 
 const categoryLabels: Record<string, string> = {
-  food: 'Alimento',
-  clothing: 'Roupa',
-  furniture: 'Movel',
-  financial: 'Financeiro',
+  alimento: 'Alimento',
+  roupa: 'Roupa',
+  movel: 'Movel',
+  financeiro: 'Financeiro',
 }
 
 function getCategoryVariant(category: string) {
   const variants: Record<string, 'default' | 'secondary' | 'destructive' | 'outline'> = {
-    food: 'default',
-    clothing: 'secondary',
-    furniture: 'outline',
-    financial: 'destructive',
+    alimento: 'default',
+    roupa: 'secondary',
+    movel: 'outline',
+    financeiro: 'destructive',
   }
   return variants[category] || 'default'
 }
@@ -112,10 +112,10 @@ onMounted(() => fetchItems())
         </SelectTrigger>
         <SelectContent>
           <SelectItem value="all">Todas</SelectItem>
-          <SelectItem value="food">Alimento</SelectItem>
-          <SelectItem value="clothing">Roupa</SelectItem>
-          <SelectItem value="furniture">Movel</SelectItem>
-          <SelectItem value="financial">Financeiro</SelectItem>
+          <SelectItem value="alimento">Alimento</SelectItem>
+          <SelectItem value="roupa">Roupa</SelectItem>
+          <SelectItem value="movel">Movel</SelectItem>
+          <SelectItem value="financeiro">Financeiro</SelectItem>
         </SelectContent>
       </Select>
       <Button variant="outline" @click="handleFilter">Filtrar</Button>

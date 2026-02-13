@@ -32,8 +32,8 @@ const search = ref('')
 const typeFilter = ref<string>('')
 
 const typeLabels: Record<string, string> = {
-  family: 'Familia',
-  org: 'Instituicao',
+  familia: 'Familia',
+  organizacao: 'Instituicao',
 }
 
 async function handleFilter() {
@@ -82,8 +82,8 @@ onMounted(() => fetchBeneficiaries())
         </SelectTrigger>
         <SelectContent>
           <SelectItem value="all">Todos</SelectItem>
-          <SelectItem value="family">Familia</SelectItem>
-          <SelectItem value="org">Instituicao</SelectItem>
+          <SelectItem value="familia">Familia</SelectItem>
+          <SelectItem value="organizacao">Instituicao</SelectItem>
         </SelectContent>
       </Select>
       <Button variant="outline" @click="handleFilter">Filtrar</Button>
@@ -116,7 +116,7 @@ onMounted(() => fetchBeneficiaries())
           <TableRow v-for="b in beneficiaries" :key="b.id">
             <TableCell class="font-medium">{{ b.name }}</TableCell>
             <TableCell>
-              <Badge :variant="b.type === 'family' ? 'default' : 'secondary'">
+              <Badge :variant="b.type === 'familia' ? 'default' : 'secondary'">
                 {{ typeLabels[b.type] }}
               </Badge>
             </TableCell>

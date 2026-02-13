@@ -23,11 +23,11 @@ export const useAuthStore = defineStore('auth', () => {
     }
     loading.value = false
 
-    supabase.auth.onAuthStateChange(async (_event, newSession) => {
+    supabase.auth.onAuthStateChange((_event, newSession) => {
       session.value = newSession
       user.value = newSession?.user ?? null
       if (user.value) {
-        await fetchProfile()
+        fetchProfile()
       } else {
         profile.value = null
       }

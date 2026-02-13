@@ -1,18 +1,27 @@
 import { supabase } from '@/lib/supabase'
 
-export type WebhookEvent = 'donation_received' | 'donation_delivered'
+export type WebhookEvent = 'doacao_recebida' | 'doacao_entregue'
 
-export async function dispatchWebhook(
+export function dispatchWebhook(
+  event: WebhookEvent,
+  payload: Record<string, unknown>,
+): void {
+  _dispatch(event, payload).catch((err) =>
+    console.error('dispatchWebhook error:', err),
+  )
+}
+
+async function _dispatch(
   event: WebhookEvent,
   payload: Record<string, unknown>,
 ) {
-  const { data: configs } = await supabase
+  const { data: configs, error } = await supabase
     .from('webhook_configs')
     .select('*')
     .eq('event_type', event)
     .eq('active', true)
 
-  if (!configs || configs.length === 0) return
+  if (error || !configs || configs.length === 0) return
 
   const webhookPayload = {
     event,

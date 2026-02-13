@@ -48,10 +48,16 @@ const newConfig = ref({
 
 async function fetchConfigs() {
   loading.value = true
-  const { data } = await supabase
+  const { data, error } = await supabase
     .from('webhook_configs')
     .select('*')
     .order('created_at', { ascending: false })
+
+  if (error) {
+    console.error('Webhook fetch error:', error)
+    toast.error(`Erro ao carregar webhooks: ${error.message}`)
+  }
+
   configs.value = (data as WebhookConfig[]) || []
   loading.value = false
 }
@@ -67,15 +73,20 @@ async function addConfig() {
     return
   }
 
-  const { error } = await supabase.from('webhook_configs').insert({
-    event_type: newConfig.value.event_type,
-    url: newConfig.value.url,
-    active: newConfig.value.active,
-    created_by: auth.user!.id,
-  })
+  const { data, error } = await supabase
+    .from('webhook_configs')
+    .insert({
+      event_type: newConfig.value.event_type,
+      url: newConfig.value.url,
+      active: newConfig.value.active,
+      created_by: auth.user!.id,
+    })
+    .select()
+    .single()
 
-  if (error) {
-    toast.error('Erro ao criar webhook')
+  if (error || !data) {
+    console.error('Webhook insert error:', error)
+    toast.error(`Erro ao criar webhook: ${error?.message || 'Permissao negada'}`)
     return
   }
 
@@ -86,18 +97,28 @@ async function addConfig() {
 }
 
 async function toggleActive(id: string, active: boolean) {
-  const { error } = await supabase
-    .from('webhook_configs')
-    .update({ active })
-    .eq('id', id)
+  try {
+    const { error } = await supabase
+      .from('webhook_configs')
+      .update({ active })
+      .eq('id', id)
 
-  if (error) {
-    toast.error('Erro ao atualizar status do webhook')
-    return
+    if (error) {
+      console.error('Webhook update error:', error)
+      toast.error(`Erro ao atualizar webhook: ${error.message}`)
+      await fetchConfigs()
+      return
+    }
+
+    const config = configs.value.find((c) => c.id === id)
+    if (config) config.active = active
+
+    toast.success(active ? 'Webhook ativado' : 'Webhook desativado')
+  } catch (err) {
+    console.error('toggleActive exception:', err)
+    toast.error('Erro inesperado ao atualizar webhook')
+    await fetchConfigs()
   }
-
-  toast.success(active ? 'Webhook ativado' : 'Webhook desativado')
-  await fetchConfigs()
 }
 
 async function deleteConfig(id: string) {
@@ -115,8 +136,8 @@ async function deleteConfig(id: string) {
 }
 
 const eventLabels: Record<string, string> = {
-  donation_received: 'Doacao Recebida',
-  donation_delivered: 'Entrega Realizada',
+  doacao_recebida: 'Doacao Recebida',
+  doacao_entregue: 'Entrega Realizada',
 }
 
 onMounted(() => fetchConfigs())
@@ -164,8 +185,8 @@ onMounted(() => fetchConfigs())
             </TableCell>
             <TableCell>
               <Switch
-                :checked="c.active"
-                @update:checked="toggleActive(c.id, $event)"
+                :model-value="c.active"
+                @update:model-value="toggleActive(c.id, $event)"
               />
             </TableCell>
             <TableCell class="text-right">
@@ -195,8 +216,8 @@ onMounted(() => fetchConfigs())
                 <SelectValue placeholder="Selecione o evento" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="donation_received">Doacao Recebida</SelectItem>
-                <SelectItem value="donation_delivered">Entrega Realizada</SelectItem>
+                <SelectItem value="doacao_recebida">Doacao Recebida</SelectItem>
+                <SelectItem value="doacao_entregue">Entrega Realizada</SelectItem>
               </SelectContent>
             </Select>
           </div>
@@ -208,10 +229,7 @@ onMounted(() => fetchConfigs())
             />
           </div>
           <div class="flex items-center gap-3">
-            <Switch
-              :checked="newConfig.active"
-              @update:checked="newConfig.active = $event"
-            />
+            <Switch v-model="newConfig.active" />
             <Label>Ativo</Label>
           </div>
         </div>

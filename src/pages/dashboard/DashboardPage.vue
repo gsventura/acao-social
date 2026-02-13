@@ -28,10 +28,10 @@ const recentExits = ref<Record<string, unknown>[]>([])
 const loading = ref(true)
 
 const categoryLabels: Record<string, string> = {
-  food: 'Alimento',
-  clothing: 'Roupa',
-  furniture: 'Movel',
-  financial: 'Financeiro',
+  alimento: 'Alimento',
+  roupa: 'Roupa',
+  movel: 'Movel',
+  financeiro: 'Financeiro',
 }
 
 onMounted(async () => {

@@ -1,6 +1,6 @@
 export type Role = 'admin' | 'member'
-export type BeneficiaryType = 'family' | 'org'
-export type ItemCategory = 'food' | 'clothing' | 'furniture' | 'financial'
+export type BeneficiaryType = 'familia' | 'organizacao'
+export type ItemCategory = 'alimento' | 'roupa' | 'movel' | 'financeiro'
 
 export interface Profile {
   id: string
@@ -53,7 +53,7 @@ export interface DonationMovement {
 
 export interface WebhookConfig {
   id: string
-  event_type: 'donation_received' | 'donation_delivered'
+  event_type: 'doacao_recebida' | 'doacao_entregue'
   url: string
   active: boolean
   created_at: string

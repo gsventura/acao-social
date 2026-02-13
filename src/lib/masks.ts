@@ -24,6 +24,6 @@ export function maskDocument(doc: string | null): string {
   return `**.***.${digits.slice(4, 7)}/****-**`
 }
 
-export function formatDocument(value: string, type: 'family' | 'org'): string {
-  return type === 'family' ? formatCPF(value) : formatCNPJ(value)
+export function formatDocument(value: string, type: 'familia' | 'organizacao'): string {
+  return type === 'familia' ? formatCPF(value) : formatCNPJ(value)
 }

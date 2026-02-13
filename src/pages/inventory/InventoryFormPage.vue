@@ -61,53 +61,58 @@ async function handleSubmit() {
     return
   }
 
-  if (form.value.category === 'food' && !form.value.expiry_date) {
+  if (form.value.category === 'alimento' && !form.value.expiry_date) {
     toast.error('Data de validade e obrigatoria para alimentos')
     return
   }
 
   saving.value = true
 
-  const payload = {
-    item_name: form.value.item_name,
-    category: form.value.category,
-    quantity: form.value.quantity,
-    donor_name: form.value.donor_name || null,
-    received_date: form.value.received_date,
-    expiry_date: form.value.expiry_date || null,
-    photo_url: form.value.photo_url,
-    created_by: auth.user!.id,
-  }
+  try {
+    const payload = {
+      item_name: form.value.item_name,
+      category: form.value.category,
+      quantity: form.value.quantity,
+      donor_name: form.value.donor_name || null,
+      received_date: form.value.received_date,
+      expiry_date: form.value.expiry_date || null,
+      photo_url: form.value.photo_url,
+      created_by: auth.user!.id,
+    }
 
-  if (isEdit.value) {
-    const { error } = await updateItem(editId.value!, payload)
+    if (isEdit.value) {
+      const { error } = await updateItem(editId.value!, payload)
+      if (error) {
+        toast.error(`Erro ao atualizar item: ${error.message}`)
+        return
+      }
+      toast.success('Item atualizado')
+    } else {
+      const { data, error } = await createItem(payload)
+      if (error) {
+        toast.error(`Erro ao registrar doacao: ${error.message}`)
+        return
+      }
+      toast.success('Doacao registrada')
+
+      if (data) {
+        dispatchWebhook('doacao_recebida', {
+          item: data.item_name,
+          category: data.category,
+          quantity: data.quantity,
+          donor: data.donor_name || 'Anonimo',
+          received_date: data.received_date,
+        })
+      }
+    }
+
+    router.push('/inventory')
+  } catch (err) {
+    toast.error('Erro inesperado ao salvar. Verifique sua conexao.')
+    console.error('handleSubmit error:', err)
+  } finally {
     saving.value = false
-    if (error) {
-      toast.error('Erro ao atualizar item')
-      return
-    }
-    toast.success('Item atualizado')
-  } else {
-    const { data, error } = await createItem(payload)
-    saving.value = false
-    if (error) {
-      toast.error('Erro ao registrar doacao')
-      return
-    }
-    toast.success('Doacao registrada')
-
-    if (data) {
-      dispatchWebhook('donation_received', {
-        item: data.item_name,
-        category: data.category,
-        quantity: data.quantity,
-        donor: data.donor_name || 'Anonimo',
-        received_date: data.received_date,
-      })
-    }
   }
-
-  router.push('/inventory')
 }
 </script>
 
@@ -146,10 +151,10 @@ async function handleSubmit() {
                 <SelectValue placeholder="Selecione" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="food">Alimento</SelectItem>
-                <SelectItem value="clothing">Roupa</SelectItem>
-                <SelectItem value="furniture">Movel</SelectItem>
-                <SelectItem value="financial">Financeiro</SelectItem>
+                <SelectItem value="alimento">Alimento</SelectItem>
+                <SelectItem value="roupa">Roupa</SelectItem>
+                <SelectItem value="movel">Movel</SelectItem>
+                <SelectItem value="financeiro">Financeiro</SelectItem>
               </SelectContent>
             </Select>
           </div>
@@ -178,7 +183,7 @@ async function handleSubmit() {
           <div class="space-y-2">
             <Label for="expiry_date">
               Data de Validade
-              <span v-if="form.category === 'food'" class="text-destructive">*</span>
+              <span v-if="form.category === 'alimento'" class="text-destructive">*</span>
             </Label>
             <Input
               id="expiry_date"

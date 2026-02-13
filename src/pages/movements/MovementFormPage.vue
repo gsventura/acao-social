@@ -53,6 +53,18 @@ function removeItem(index: number) {
   form.value.items.splice(index, 1)
 }
 
+const categoryLabels: Record<string, string> = {
+  alimento: 'Alimento',
+  roupa: 'Roupa',
+  movel: 'Movel',
+  financeiro: 'Financeiro',
+}
+
+function formatDate(date: string): string {
+  const [y, m, d] = date.split('-')
+  return `${d}/${m}/${y}`
+}
+
 function getMaxQty(itemId: string): number {
   const item = availableStock.value.find((i) => i.id === itemId)
   return item ? item.quantity : 0
@@ -89,43 +101,48 @@ async function handleSubmit() {
 
   saving.value = true
 
-  const itemsJson = validItems.map((i) => ({
-    inventory_item_id: i.inventory_item_id,
-    item_name: getItemName(i.inventory_item_id),
-    quantity: i.quantity,
-  }))
+  try {
+    const itemsJson = validItems.map((i) => ({
+      inventory_item_id: i.inventory_item_id,
+      item_name: getItemName(i.inventory_item_id),
+      quantity: i.quantity,
+    }))
 
-  const beneficiary = activeBeneficiaries.value.find(
-    (b) => b.id === form.value.beneficiary_id,
-  )
+    const beneficiary = activeBeneficiaries.value.find(
+      (b) => b.id === form.value.beneficiary_id,
+    )
 
-  const { data, error } = await createMovement({
-    beneficiary_id: form.value.beneficiary_id,
-    items_json: itemsJson,
-    delivered_at: form.value.delivered_at,
-    evidence_photo_url: form.value.evidence_photo_url,
-    delivered_by: auth.user!.id,
-  })
-
-  saving.value = false
-
-  if (error) {
-    toast.error('Erro ao registrar entrega')
-    return
-  }
-
-  toast.success('Entrega registrada')
-
-  if (data) {
-    dispatchWebhook('donation_delivered', {
-      beneficiary: beneficiary?.name || '',
-      delivered_by: auth.profile?.full_name || '',
-      items: itemsJson,
-      evidence_url: data.evidence_photo_url,
+    const { data, error } = await createMovement({
+      beneficiary_id: form.value.beneficiary_id,
+      items_json: itemsJson,
+      delivered_at: form.value.delivered_at,
+      evidence_photo_url: form.value.evidence_photo_url,
+      delivered_by: auth.user!.id,
     })
-  }
 
-  router.push('/movements')
+    if (error) {
+      toast.error(`Erro ao registrar entrega: ${error.message}`)
+      return
+    }
+
+    toast.success('Entrega registrada')
+
+    if (data) {
+      dispatchWebhook('doacao_entregue', {
+        beneficiary: beneficiary?.name || '',
+        delivered_by: auth.profile?.full_name || '',
+        items: itemsJson,
+        evidence_url: data.evidence_photo_url,
+      })
+    }
+
+    router.push('/movements')
+  } catch (err) {
+    toast.error('Erro inesperado ao salvar. Verifique sua conexao.')
+    console.error('handleSubmit error:', err)
+  } finally {
+    saving.value = false
+  }
 }
 
 onMounted(async () => {
@@ -179,13 +196,18 @@ onMounted(async () => {
                 <SelectTrigger>
                   <SelectValue placeholder="Selecione" />
                 </SelectTrigger>
-                <SelectContent>
+                <SelectContent class="max-h-72">
                   <SelectItem
                     v-for="s in availableStock"
                     :key="s.id"
                     :value="s.id"
                   >
-                    {{ s.item_name }} (disp: {{ s.quantity }})
+                    <div class="flex flex-col py-0.5">
+                      <span>{{ s.item_name }} <span class="text-muted-foreground">({{ categoryLabels[s.category] }}, {{ s.quantity }} un.)</span></span>
+                      <span class="text-xs text-muted-foreground">
+                        {{ s.donor_name || 'Doador anonimo' }} · {{ formatDate(s.received_date) }}
+                      </span>
+                    </div>
                   </SelectItem>
                 </SelectContent>
               </Select>

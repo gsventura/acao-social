@@ -44,7 +44,7 @@ watch(
     if (form.value.type && val) {
       form.value.document = formatDocument(
         val,
-        form.value.type as 'family' | 'org',
+        form.value.type as 'familia' | 'organizacao',
       )
     }
   },
@@ -75,35 +75,40 @@ async function handleSubmit() {
 
   saving.value = true
 
-  const payload = {
-    name: form.value.name,
-    type: form.value.type,
-    document: form.value.document || null,
-    address: form.value.address || null,
-    contact_info: form.value.contact_info || null,
-    responsible_person: form.value.responsible_person || null,
-    active: form.value.active,
-  }
-
-  if (isEdit.value) {
-    const { error } = await updateBeneficiary(editId.value!, payload)
-    saving.value = false
-    if (error) {
-      toast.error('Erro ao atualizar beneficiario')
-      return
+  try {
+    const payload = {
+      name: form.value.name,
+      type: form.value.type,
+      document: form.value.document || null,
+      address: form.value.address || null,
+      contact_info: form.value.contact_info || null,
+      responsible_person: form.value.responsible_person || null,
+      active: form.value.active,
     }
-    toast.success('Beneficiario atualizado')
-  } else {
-    const { error } = await createBeneficiary(payload)
-    saving.value = false
-    if (error) {
-      toast.error('Erro ao cadastrar beneficiario')
-      return
-    }
-    toast.success('Beneficiario cadastrado')
-  }
 
-  router.push('/beneficiaries')
+    if (isEdit.value) {
+      const { error } = await updateBeneficiary(editId.value!, payload)
+      if (error) {
+        toast.error(`Erro ao atualizar beneficiario: ${error.message}`)
+        return
+      }
+      toast.success('Beneficiario atualizado')
+    } else {
+      const { error } = await createBeneficiary(payload)
+      if (error) {
+        toast.error(`Erro ao cadastrar beneficiario: ${error.message}`)
+        return
+      }
+      toast.success('Beneficiario cadastrado')
+    }
+
+    router.push('/beneficiaries')
+  } catch (err) {
+    toast.error('Erro inesperado ao salvar. Verifique sua conexao.')
+    console.error('handleSubmit error:', err)
+  } finally {
+    saving.value = false
+  }
 }
 </script>
 
@@ -132,20 +137,20 @@ async function handleSubmit() {
               <SelectValue placeholder="Selecione" />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="family">Familia</SelectItem>
-              <SelectItem value="org">Instituicao</SelectItem>
+              <SelectItem value="familia">Familia</SelectItem>
+              <SelectItem value="organizacao">Instituicao</SelectItem>
             </SelectContent>
           </Select>
         </div>
 
         <div class="space-y-2">
           <Label for="document">
-            {{ form.type === 'org' ? 'CNPJ' : 'CPF' }}
+            {{ form.type === 'organizacao' ? 'CNPJ' : 'CPF' }}
           </Label>
           <Input
             id="document"
             v-model="form.document"
-            :placeholder="form.type === 'org' ? '00.000.000/0000-00' : '000.000.000-00'"
+            :placeholder="form.type === 'organizacao' ? '00.000.000/0000-00' : '000.000.000-00'"
           />
         </div>
 
@@ -178,10 +183,7 @@ async function handleSubmit() {
         </div>
 
         <div class="flex items-center gap-3">
-          <Switch
-            :checked="form.active"
-            @update:checked="form.active = $event"
-          />
+          <Switch v-model="form.active" />
           <Label>{{ form.active ? 'Ativo' : 'Inativo' }}</Label>
         </div>
 
