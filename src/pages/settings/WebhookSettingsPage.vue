@@ -86,10 +86,17 @@ async function addConfig() {
 }
 
 async function toggleActive(id: string, active: boolean) {
-  await supabase
+  const { error } = await supabase
     .from('webhook_configs')
     .update({ active })
     .eq('id', id)
+
+  if (error) {
+    toast.error('Erro ao atualizar status do webhook')
+    return
+  }
+
+  toast.success(active ? 'Webhook ativado' : 'Webhook desativado')
   await fetchConfigs()
 }
 

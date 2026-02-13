@@ -97,7 +97,7 @@ async function handleSubmit() {
     toast.success('Doacao registrada')
 
     if (data) {
-      await dispatchWebhook('donation_received', {
+      dispatchWebhook('donation_received', {
         item: data.item_name,
         category: data.category,
         quantity: data.quantity,

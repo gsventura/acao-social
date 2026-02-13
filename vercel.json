@@ -1,8 +1,10 @@
 {
-    "rewrites": [
-        {
-            "source": "/:path*",
-            "destination": "/index.html"
-        }
-    ]
+  "framework": "vite",
+  "outputDirectory": "dist",
+  "rewrites": [
+    {
+      "source": "/:path*",
+      "destination": "/index.html"
+    }
+  ]
 }

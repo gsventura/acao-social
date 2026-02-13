@@ -20,15 +20,21 @@ export async function dispatchWebhook(
     data: payload,
   }
 
-  const promises = configs.map((config) =>
-    fetch(config.url, {
+  const promises = configs.map((config) => {
+    const controller = new AbortController()
+    const timeout = setTimeout(() => controller.abort(), 5000)
+
+    return fetch(config.url, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(webhookPayload),
-    }).catch((err) =>
-      console.error(`Webhook to ${config.url} failed:`, err),
-    ),
-  )
+      signal: controller.signal,
+    })
+      .catch((err) =>
+        console.error(`Webhook to ${config.url} failed:`, err),
+      )
+      .finally(() => clearTimeout(timeout))
+  })
 
   await Promise.allSettled(promises)
 }

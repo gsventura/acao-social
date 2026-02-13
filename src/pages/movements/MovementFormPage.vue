@@ -117,7 +117,7 @@ async function handleSubmit() {
   toast.success('Entrega registrada')
 
   if (data) {
-    await dispatchWebhook('donation_delivered', {
+    dispatchWebhook('donation_delivered', {
       beneficiary: beneficiary?.name || '',
       delivered_by: auth.profile?.full_name || '',
       items: itemsJson,
