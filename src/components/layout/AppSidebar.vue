@@ -50,10 +50,9 @@ function navigate(path: string) {
 
 <template>
   <Sidebar>
-    <SidebarHeader class="border-b px-4 py-3">
-      <div class="flex items-center gap-2">
-        <Heart class="h-6 w-6 text-primary" />
-        <span class="text-lg font-semibold">Diaconia</span>
+    <SidebarHeader class="border-b px-4 py-2">
+      <div class="flex items-center justify-center overflow-hidden">
+        <img src="/logo.png" alt="Logo" class="h-20 w-auto object-contain" />
       </div>
     </SidebarHeader>
 
