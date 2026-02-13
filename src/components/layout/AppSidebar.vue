@@ -19,8 +19,7 @@ import {
   Users,
   Truck,
   Webhook,
-  UserCog,
-  Heart,
+  UserCog
 } from 'lucide-vue-next'
 
 const route = useRoute()
