@@ -56,7 +56,7 @@ function removeItem(index: number) {
 const categoryLabels: Record<string, string> = {
   alimento: 'Alimento',
   roupa: 'Roupa',
-  movel: 'Movel',
+  movel: 'Móvel',
   financeiro: 'Financeiro',
 }
 
@@ -77,7 +77,7 @@ function getItemName(itemId: string): string {
 
 async function handleSubmit() {
   if (!form.value.beneficiary_id) {
-    toast.error('Selecione um beneficiario')
+    toast.error('Selecione um beneficiário')
     return
   }
 
@@ -138,7 +138,7 @@ async function handleSubmit() {
 
     router.push('/movements')
   } catch (err) {
-    toast.error('Erro inesperado ao salvar. Verifique sua conexao.')
+    toast.error('Erro inesperado ao salvar. Verifique sua conexão.')
     console.error('handleSubmit error:', err)
   } finally {
     saving.value = false
@@ -153,16 +153,16 @@ onMounted(async () => {
 
 <template>
   <div class="mx-auto max-w-2xl">
-    <Card>
+    <Card class="border-t-2 border-t-[var(--stewardship)]">
       <CardHeader>
-        <CardTitle>Registrar Entrega de Doacao</CardTitle>
+        <CardTitle class="text-lg">Registrar Entrega de Doação</CardTitle>
       </CardHeader>
       <CardContent class="space-y-4">
-        <div class="space-y-2">
-          <Label>Beneficiario *</Label>
+        <div class="space-y-1.5">
+          <Label>Beneficiário *</Label>
           <Select v-model="form.beneficiary_id">
             <SelectTrigger>
-              <SelectValue placeholder="Selecione o beneficiario" />
+              <SelectValue placeholder="Selecione o beneficiário" />
             </SelectTrigger>
             <SelectContent>
               <SelectItem
@@ -191,7 +191,7 @@ onMounted(async () => {
             class="flex items-end gap-3"
           >
             <div class="flex-1 space-y-1">
-              <Label v-if="index === 0" class="text-xs">Item</Label>
+              <Label v-if="index === 0" class="text-xs text-muted-foreground">Item</Label>
               <Select v-model="item.inventory_item_id">
                 <SelectTrigger>
                   <SelectValue placeholder="Selecione" />
@@ -214,7 +214,7 @@ onMounted(async () => {
             </div>
 
             <div class="w-24 space-y-1">
-              <Label v-if="index === 0" class="text-xs">Qtd</Label>
+              <Label v-if="index === 0" class="text-xs text-muted-foreground">Qtd</Label>
               <Input
                 v-model.number="item.quantity"
                 type="number"
@@ -234,7 +234,7 @@ onMounted(async () => {
           </div>
         </div>
 
-        <div class="space-y-2">
+        <div class="space-y-1.5">
           <Label for="delivered_at">Data da Entrega *</Label>
           <Input
             id="delivered_at"
@@ -243,7 +243,7 @@ onMounted(async () => {
           />
         </div>
 
-        <div class="space-y-2">
+        <div class="space-y-1.5">
           <Label>Entregue por</Label>
           <Input
             :model-value="auth.profile?.full_name || ''"
@@ -251,8 +251,8 @@ onMounted(async () => {
           />
         </div>
 
-        <div class="space-y-2">
-          <Label>Foto da Entrega (evidencia)</Label>
+        <div class="space-y-1.5">
+          <Label>Foto da Entrega (evidência)</Label>
           <PhotoUpload
             v-model="form.evidence_photo_url"
             folder="deliveries"

@@ -6,6 +6,16 @@ import {
   SidebarProvider,
   SidebarTrigger,
 } from '@/components/ui/sidebar'
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu'
+import { Button } from '@/components/ui/button'
+import { Separator } from '@/components/ui/separator'
 import AppSidebar from './AppSidebar.vue'
 import { LogOut } from 'lucide-vue-next'
 
@@ -27,20 +37,33 @@ function getInitials(name: string | undefined) {
   <SidebarProvider>
     <AppSidebar />
     <SidebarInset>
-      <header class="flex h-14 items-center gap-3 border-b px-4">
-        <SidebarTrigger class="-ml-1" />
+      <header class="flex h-12 items-center gap-3 border-b px-4">
+        <SidebarTrigger class="-ml-1 text-muted-foreground hover:text-foreground transition-colors" />
+        <Separator orientation="vertical" class="h-5" />
         <div class="flex-1" />
-        <div class="flex items-center gap-2">
-          <div class="flex h-8 w-8 items-center justify-center rounded-full bg-primary text-xs text-primary-foreground">
-            {{ getInitials(auth.profile?.full_name) }}
-          </div>
-          <button
-            class="rounded-md p-1.5 text-muted-foreground hover:bg-accent hover:text-foreground"
-            @click="handleLogout"
-          >
-            <LogOut class="h-4 w-4" />
-          </button>
-        </div>
+
+        <DropdownMenu>
+          <DropdownMenuTrigger as-child>
+            <Button variant="ghost" size="icon" class="rounded-full h-8 w-8">
+              <div class="flex h-7 w-7 items-center justify-center rounded-full bg-[var(--stewardship)] text-[11px] font-medium text-primary-foreground">
+                {{ getInitials(auth.profile?.full_name) }}
+              </div>
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent align="end" class="w-48">
+            <DropdownMenuLabel>
+              <div class="font-medium">{{ auth.profile?.full_name }}</div>
+              <div class="text-[11px] font-normal text-muted-foreground">
+                {{ auth.profile?.role === 'admin' ? 'Administrador' : 'Membro' }}
+              </div>
+            </DropdownMenuLabel>
+            <DropdownMenuSeparator />
+            <DropdownMenuItem @click="handleLogout">
+              <LogOut class="mr-2 h-4 w-4" />
+              Sair
+            </DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
       </header>
 
       <main class="flex-1 p-6">

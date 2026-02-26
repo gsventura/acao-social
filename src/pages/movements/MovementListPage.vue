@@ -33,12 +33,12 @@ function getItemsSummary(itemsJson: unknown): string {
 
 function getBeneficiaryName(movement: Record<string, unknown>): string {
   const ben = movement.beneficiaries as { name: string } | null
-  return ben?.name || '---'
+  return ben?.name || '—'
 }
 
 function getDeliveredByName(movement: Record<string, unknown>): string {
   const profile = movement.profiles as { full_name: string } | null
-  return profile?.full_name || '---'
+  return profile?.full_name || '—'
 }
 
 async function handleDelete(id: string) {
@@ -58,7 +58,10 @@ onMounted(() => fetchMovements())
 <template>
   <div class="space-y-6">
     <div class="flex items-center justify-between">
-      <h1 class="text-2xl font-bold">Movimentacoes / Saidas</h1>
+      <div>
+        <h1 class="text-xl font-semibold tracking-tight">Movimentações / Saídas</h1>
+        <p class="text-sm text-muted-foreground">Entregas realizadas aos beneficiários</p>
+      </div>
       <RouterLink to="/movements/new">
         <Button>
           <Plus class="mr-2 h-4 w-4" />
@@ -71,12 +74,12 @@ onMounted(() => fetchMovements())
       <Table>
         <TableHeader>
           <TableRow>
-            <TableHead>Beneficiario</TableHead>
+            <TableHead>Beneficiário</TableHead>
             <TableHead>Itens</TableHead>
             <TableHead>Data Entrega</TableHead>
             <TableHead>Entregue por</TableHead>
-            <TableHead>Evidencia</TableHead>
-            <TableHead v-if="auth.isAdmin" class="text-right">Acoes</TableHead>
+            <TableHead>Evidência</TableHead>
+            <TableHead v-if="auth.isAdmin" class="text-right">Ações</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
@@ -87,20 +90,20 @@ onMounted(() => fetchMovements())
           </TableRow>
           <TableRow v-else-if="movements.length === 0">
             <TableCell :colspan="auth.isAdmin ? 6 : 5" class="text-center py-8 text-muted-foreground">
-              Nenhuma movimentacao encontrada
+              Nenhuma movimentação encontrada
             </TableCell>
           </TableRow>
           <TableRow v-for="m in movements" :key="m.id">
             <TableCell class="font-medium">
               {{ getBeneficiaryName(m as unknown as Record<string, unknown>) }}
             </TableCell>
-            <TableCell class="max-w-xs truncate">
+            <TableCell class="max-w-xs truncate text-muted-foreground">
               {{ getItemsSummary(m.items_json) }}
             </TableCell>
-            <TableCell>
+            <TableCell class="text-muted-foreground">
               {{ new Date(m.delivered_at).toLocaleDateString('pt-BR') }}
             </TableCell>
-            <TableCell>
+            <TableCell class="text-muted-foreground">
               {{ getDeliveredByName(m as unknown as Record<string, unknown>) }}
             </TableCell>
             <TableCell>
@@ -112,7 +115,7 @@ onMounted(() => fetchMovements())
               >
                 <Image class="h-4 w-4" />
               </Button>
-              <span v-else class="text-muted-foreground">---</span>
+              <span v-else class="text-muted-foreground">—</span>
             </TableCell>
             <TableCell v-if="auth.isAdmin" class="text-right">
               <Button
@@ -137,7 +140,7 @@ onMounted(() => fetchMovements())
           v-if="photoPreview"
           :src="photoPreview"
           alt="Evidencia da entrega"
-          class="w-full rounded-lg"
+          class="w-full rounded-md"
         />
       </DialogContent>
     </Dialog>

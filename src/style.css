@@ -4,6 +4,7 @@
 @custom-variant dark (&:is(.dark *));
 
 @theme inline {
+  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
   --radius-sm: calc(var(--radius) - 4px);
   --radius-md: calc(var(--radius) - 2px);
   --radius-lg: var(--radius);
@@ -39,75 +40,130 @@
   --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
   --color-sidebar-border: var(--sidebar-border);
   --color-sidebar-ring: var(--sidebar-ring);
+  --color-stewardship: var(--stewardship);
 }
 
+/*
+ * Diaconia App — Stewardship Theme
+ *
+ * Identity: Forest green #06452A
+ * Canvas: Warm parchment #F7F5F2
+ * Ink: Warm charcoal #1C1C1A
+ * Depth strategy: Borders-only
+ * Signature: Green stewardship accent line on cards and active states
+ */
+
 :root {
-  --radius: 0.625rem;
-  --background: oklch(1 0 0);
-  --foreground: oklch(0.145 0 0);
-  --card: oklch(1 0 0);
-  --card-foreground: oklch(0.145 0 0);
-  --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0.145 0 0);
-  --primary: oklch(0.205 0 0);
-  --primary-foreground: oklch(0.985 0 0);
-  --secondary: oklch(0.97 0 0);
-  --secondary-foreground: oklch(0.205 0 0);
-  --muted: oklch(0.97 0 0);
-  --muted-foreground: oklch(0.556 0 0);
-  --accent: oklch(0.97 0 0);
-  --accent-foreground: oklch(0.205 0 0);
-  --destructive: oklch(0.577 0.245 27.325);
-  --border: oklch(0.922 0 0);
-  --input: oklch(0.922 0 0);
-  --ring: oklch(0.708 0 0);
-  --chart-1: oklch(0.646 0.222 41.116);
-  --chart-2: oklch(0.6 0.118 184.704);
-  --chart-3: oklch(0.398 0.07 227.392);
-  --chart-4: oklch(0.828 0.189 84.429);
-  --chart-5: oklch(0.769 0.188 70.08);
-  --sidebar: oklch(0.985 0 0);
-  --sidebar-foreground: oklch(0.145 0 0);
-  --sidebar-primary: oklch(0.205 0 0);
-  --sidebar-primary-foreground: oklch(0.985 0 0);
-  --sidebar-accent: oklch(0.97 0 0);
-  --sidebar-accent-foreground: oklch(0.205 0 0);
-  --sidebar-border: oklch(0.922 0 0);
-  --sidebar-ring: oklch(0.708 0 0);
+  --radius: 0.5rem;
+
+  /* Surfaces — warm parchment tones */
+  --background: #F7F5F2;
+  --foreground: #1C1C1A;
+
+  --card: #FDFCFA;
+  --card-foreground: #1C1C1A;
+
+  --popover: #FDFCFA;
+  --popover-foreground: #1C1C1A;
+
+  /* Brand — forest green stewardship */
+  --primary: #06452A;
+  --primary-foreground: #F7F5F2;
+
+  /* Secondary — warm stone */
+  --secondary: #EDEAE6;
+  --secondary-foreground: #2E2E2C;
+
+  /* Muted — quiet warm gray */
+  --muted: #EDEAE6;
+  --muted-foreground: #6B6966;
+
+  /* Accent — light green tint for hovers */
+  --accent: #E8F0EB;
+  --accent-foreground: #06452A;
+
+  /* Semantic */
+  --destructive: #B33B2E;
+
+  /* Structure — warm, disappearing borders */
+  --border: #E0DDD8;
+  --input: #E0DDD8;
+  --ring: #06452A;
+
+  /* Charts — earthy tones */
+  --chart-1: #06452A;
+  --chart-2: #5A8A6E;
+  --chart-3: #8B7355;
+  --chart-4: #C4956A;
+  --chart-5: #D4A574;
+
+  /* Sidebar — same canvas, border-separated */
+  --sidebar: #F7F5F2;
+  --sidebar-foreground: #1C1C1A;
+  --sidebar-primary: #06452A;
+  --sidebar-primary-foreground: #F7F5F2;
+  --sidebar-accent: #E8F0EB;
+  --sidebar-accent-foreground: #06452A;
+  --sidebar-border: #E0DDD8;
+  --sidebar-ring: #06452A;
+
+  /* Stewardship signature */
+  --stewardship: #06452A;
 }
 
 .dark {
-  --background: oklch(0.145 0 0);
-  --foreground: oklch(0.985 0 0);
-  --card: oklch(0.205 0 0);
-  --card-foreground: oklch(0.985 0 0);
-  --popover: oklch(0.205 0 0);
-  --popover-foreground: oklch(0.985 0 0);
-  --primary: oklch(0.922 0 0);
-  --primary-foreground: oklch(0.205 0 0);
-  --secondary: oklch(0.269 0 0);
-  --secondary-foreground: oklch(0.985 0 0);
-  --muted: oklch(0.269 0 0);
-  --muted-foreground: oklch(0.708 0 0);
-  --accent: oklch(0.269 0 0);
-  --accent-foreground: oklch(0.985 0 0);
-  --destructive: oklch(0.704 0.191 22.216);
-  --border: oklch(1 0 0 / 10%);
-  --input: oklch(1 0 0 / 15%);
-  --ring: oklch(0.556 0 0);
-  --chart-1: oklch(0.488 0.243 264.376);
-  --chart-2: oklch(0.696 0.17 162.48);
-  --chart-3: oklch(0.769 0.188 70.08);
-  --chart-4: oklch(0.627 0.265 303.9);
-  --chart-5: oklch(0.645 0.246 16.439);
-  --sidebar: oklch(0.205 0 0);
-  --sidebar-foreground: oklch(0.985 0 0);
-  --sidebar-primary: oklch(0.488 0.243 264.376);
-  --sidebar-primary-foreground: oklch(0.985 0 0);
-  --sidebar-accent: oklch(0.269 0 0);
-  --sidebar-accent-foreground: oklch(0.985 0 0);
-  --sidebar-border: oklch(1 0 0 / 10%);
-  --sidebar-ring: oklch(0.556 0 0);
+  /* Dark surfaces — warm dark, not cold */
+  --background: #1A1917;
+  --foreground: #E8E5E0;
+
+  --card: #242320;
+  --card-foreground: #E8E5E0;
+
+  --popover: #242320;
+  --popover-foreground: #E8E5E0;
+
+  /* Brand — slightly lifted green for dark */
+  --primary: #3D9B6E;
+  --primary-foreground: #1A1917;
+
+  /* Secondary */
+  --secondary: #2E2D2A;
+  --secondary-foreground: #E8E5E0;
+
+  /* Muted */
+  --muted: #2E2D2A;
+  --muted-foreground: #8A8783;
+
+  /* Accent */
+  --accent: #1E2B22;
+  --accent-foreground: #5ABF8A;
+
+  /* Semantic */
+  --destructive: #D4544A;
+
+  /* Structure */
+  --border: rgba(232, 229, 224, 0.1);
+  --input: rgba(232, 229, 224, 0.15);
+  --ring: #3D9B6E;
+
+  /* Charts */
+  --chart-1: #3D9B6E;
+  --chart-2: #5ABF8A;
+  --chart-3: #C4956A;
+  --chart-4: #8B7355;
+  --chart-5: #D4A574;
+
+  /* Sidebar */
+  --sidebar: #1A1917;
+  --sidebar-foreground: #E8E5E0;
+  --sidebar-primary: #3D9B6E;
+  --sidebar-primary-foreground: #1A1917;
+  --sidebar-accent: #1E2B22;
+  --sidebar-accent-foreground: #5ABF8A;
+  --sidebar-border: rgba(232, 229, 224, 0.1);
+  --sidebar-ring: #3D9B6E;
+
+  --stewardship: #3D9B6E;
 }
 
 @layer base {
@@ -115,6 +171,6 @@
     @apply border-border outline-ring/50;
   }
   body {
-    @apply bg-background text-foreground;
+    @apply bg-background text-foreground font-sans antialiased;
   }
 }

@@ -53,7 +53,10 @@ onMounted(() => fetchProfiles())
 
 <template>
   <div class="space-y-6">
-    <h1 class="text-2xl font-bold">Gestao de Usuarios</h1>
+    <div>
+      <h1 class="text-xl font-semibold tracking-tight">Gestao de Usuarios</h1>
+      <p class="text-sm text-muted-foreground">Gerencie perfis e permissoes</p>
+    </div>
 
     <div class="rounded-md border">
       <Table>
@@ -85,7 +88,7 @@ onMounted(() => fetchProfiles())
                 {{ p.role === 'admin' ? 'Administrador' : 'Membro' }}
               </Badge>
             </TableCell>
-            <TableCell>
+            <TableCell class="text-muted-foreground">
               {{ new Date(p.created_at).toLocaleDateString('pt-BR') }}
             </TableCell>
             <TableCell>

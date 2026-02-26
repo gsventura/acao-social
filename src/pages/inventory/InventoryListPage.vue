@@ -39,7 +39,7 @@ const photoPreview = ref<string | null>(null)
 const categoryLabels: Record<string, string> = {
   alimento: 'Alimento',
   roupa: 'Roupa',
-  movel: 'Movel',
+  movel: 'Móvel',
   financeiro: 'Financeiro',
 }
 
@@ -80,7 +80,7 @@ async function handleDelete(id: string) {
     toast.error('Erro ao excluir item')
     return
   }
-  toast.success('Item excluido')
+  toast.success('Item excluído')
   await fetchItems()
 }
 
@@ -90,7 +90,10 @@ onMounted(() => fetchItems())
 <template>
   <div class="space-y-6">
     <div class="flex items-center justify-between">
-      <h1 class="text-2xl font-bold">Estoque / Inventario</h1>
+      <div>
+        <h1 class="text-xl font-semibold tracking-tight">Estoque / Inventario</h1>
+        <p class="text-sm text-muted-foreground">Itens recebidos pela diaconia</p>
+      </div>
       <RouterLink to="/inventory/new">
         <Button>
           <Plus class="mr-2 h-4 w-4" />
@@ -159,10 +162,10 @@ onMounted(() => fetchItems())
                 {{ categoryLabels[item.category] }}
               </Badge>
             </TableCell>
-            <TableCell class="text-right font-mono">
+            <TableCell class="text-right font-mono tabular-nums">
               {{ item.quantity }}
             </TableCell>
-            <TableCell>
+            <TableCell class="text-muted-foreground">
               {{ new Date(item.received_date).toLocaleDateString('pt-BR') }}
             </TableCell>
             <TableCell>
@@ -170,13 +173,13 @@ onMounted(() => fetchItems())
                 <span
                   :class="{
                     'text-destructive font-medium': isExpired(item.expiry_date),
-                    'text-yellow-600 font-medium': isExpiringSoon(item.expiry_date),
+                    'text-amber-600 font-medium': isExpiringSoon(item.expiry_date),
                   }"
                 >
                   {{ new Date(item.expiry_date).toLocaleDateString('pt-BR') }}
                 </span>
               </template>
-              <span v-else class="text-muted-foreground">---</span>
+              <span v-else class="text-muted-foreground">—</span>
             </TableCell>
             <TableCell>
               <Button
@@ -187,7 +190,7 @@ onMounted(() => fetchItems())
               >
                 <Image class="h-4 w-4" />
               </Button>
-              <span v-else class="text-muted-foreground">---</span>
+              <span v-else class="text-muted-foreground">—</span>
             </TableCell>
             <TableCell v-if="auth.isAdmin" class="text-right">
               <Button
@@ -212,7 +215,7 @@ onMounted(() => fetchItems())
           v-if="photoPreview"
           :src="photoPreview"
           alt="Foto do item"
-          class="w-full rounded-lg"
+          class="w-full rounded-md"
         />
       </DialogContent>
     </Dialog>

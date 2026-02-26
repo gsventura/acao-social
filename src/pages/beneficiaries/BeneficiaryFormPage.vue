@@ -114,14 +114,14 @@ async function handleSubmit() {
 
 <template>
   <div class="mx-auto max-w-2xl">
-    <Card>
+    <Card class="border-t-2 border-t-[var(--stewardship)]">
       <CardHeader>
-        <CardTitle>
-          {{ isEdit ? 'Editar Beneficiario' : 'Novo Beneficiario' }}
+        <CardTitle class="text-lg">
+          {{ isEdit ? 'Editar Beneficiário' : 'Novo Beneficiário' }}
         </CardTitle>
       </CardHeader>
       <CardContent class="space-y-4">
-        <div class="space-y-2">
+        <div class="space-y-1.5">
           <Label for="name">Nome *</Label>
           <Input
             id="name"
@@ -130,20 +130,20 @@ async function handleSubmit() {
           />
         </div>
 
-        <div class="space-y-2">
+        <div class="space-y-1.5">
           <Label>Tipo *</Label>
           <Select v-model="form.type">
             <SelectTrigger>
               <SelectValue placeholder="Selecione" />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="familia">Familia</SelectItem>
-              <SelectItem value="organizacao">Instituicao</SelectItem>
+              <SelectItem value="familia">Família</SelectItem>
+              <SelectItem value="organizacao">Instituição</SelectItem>
             </SelectContent>
           </Select>
         </div>
 
-        <div class="space-y-2">
+        <div class="space-y-1.5">
           <Label for="document">
             {{ form.type === 'organizacao' ? 'CNPJ' : 'CPF' }}
           </Label>
@@ -154,17 +154,17 @@ async function handleSubmit() {
           />
         </div>
 
-        <div class="space-y-2">
-          <Label for="address">Endereco</Label>
+        <div class="space-y-1.5">
+          <Label for="address">Endereço</Label>
           <Textarea
             id="address"
             v-model="form.address"
-            placeholder="Endereco completo"
+            placeholder="Endereço completo"
             rows="2"
           />
         </div>
 
-        <div class="space-y-2">
+        <div class="space-y-1.5">
           <Label for="contact">Contato (telefone/e-mail)</Label>
           <Input
             id="contact"
@@ -173,12 +173,12 @@ async function handleSubmit() {
           />
         </div>
 
-        <div class="space-y-2">
-          <Label for="responsible">Responsavel</Label>
+        <div class="space-y-1.5">
+          <Label for="responsible">Responsável</Label>
           <Input
             id="responsible"
             v-model="form.responsible_person"
-            placeholder="Nome do responsavel"
+            placeholder="Nome do responsável"
           />
         </div>
 

@@ -32,8 +32,8 @@ const search = ref('')
 const typeFilter = ref<string>('')
 
 const typeLabels: Record<string, string> = {
-  familia: 'Familia',
-  organizacao: 'Instituicao',
+  familia: 'Família',
+  organizacao: 'Instituição',
 }
 
 async function handleFilter() {
@@ -44,13 +44,13 @@ async function handleFilter() {
 }
 
 async function handleDelete(id: string) {
-  if (!confirm('Tem certeza que deseja excluir este beneficiario?')) return
+  if (!confirm('Tem certeza que deseja excluir este beneficiário?')) return
   const { error } = await deleteBeneficiary(id)
   if (error) {
-    toast.error('Erro ao excluir beneficiario')
+    toast.error('Erro ao excluir beneficiário')
     return
   }
-  toast.success('Beneficiario excluido')
+  toast.success('Beneficiário excluído')
   await fetchBeneficiaries()
 }
 
@@ -60,11 +60,14 @@ onMounted(() => fetchBeneficiaries())
 <template>
   <div class="space-y-6">
     <div class="flex items-center justify-between">
-      <h1 class="text-2xl font-bold">Beneficiarios</h1>
+      <div>
+        <h1 class="text-xl font-semibold tracking-tight">Beneficiários</h1>
+        <p class="text-sm text-muted-foreground">Famílias e instituições atendidas</p>
+      </div>
       <RouterLink to="/beneficiaries/new">
         <Button>
           <Plus class="mr-2 h-4 w-4" />
-          Novo Beneficiario
+          Novo Beneficiário
         </Button>
       </RouterLink>
     </div>
@@ -82,8 +85,8 @@ onMounted(() => fetchBeneficiaries())
         </SelectTrigger>
         <SelectContent>
           <SelectItem value="all">Todos</SelectItem>
-          <SelectItem value="familia">Familia</SelectItem>
-          <SelectItem value="organizacao">Instituicao</SelectItem>
+          <SelectItem value="familia">Família</SelectItem>
+          <SelectItem value="organizacao">Instituição</SelectItem>
         </SelectContent>
       </Select>
       <Button variant="outline" @click="handleFilter">Filtrar</Button>
@@ -110,7 +113,7 @@ onMounted(() => fetchBeneficiaries())
           </TableRow>
           <TableRow v-else-if="beneficiaries.length === 0">
             <TableCell :colspan="auth.isAdmin ? 7 : 4" class="text-center py-8 text-muted-foreground">
-              Nenhum beneficiario encontrado
+              Nenhum beneficiário encontrado
             </TableCell>
           </TableRow>
           <TableRow v-for="b in beneficiaries" :key="b.id">
@@ -120,13 +123,13 @@ onMounted(() => fetchBeneficiaries())
                 {{ typeLabels[b.type] }}
               </Badge>
             </TableCell>
-            <TableCell v-if="auth.isAdmin">
-              {{ b.document ? maskDocument(b.document) : '---' }}
+            <TableCell v-if="auth.isAdmin" class="font-mono text-sm text-muted-foreground">
+              {{ b.document ? maskDocument(b.document) : '—' }}
             </TableCell>
-            <TableCell v-if="auth.isAdmin">
-              {{ b.contact_info || '---' }}
+            <TableCell v-if="auth.isAdmin" class="text-muted-foreground">
+              {{ b.contact_info || '—' }}
             </TableCell>
-            <TableCell>{{ b.responsible_person || '---' }}</TableCell>
+            <TableCell class="text-muted-foreground">{{ b.responsible_person || '—' }}</TableCell>
             <TableCell>
               <Badge :variant="b.active ? 'default' : 'outline'">
                 {{ b.active ? 'Ativo' : 'Inativo' }}

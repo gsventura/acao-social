@@ -146,7 +146,10 @@ onMounted(() => fetchConfigs())
 <template>
   <div class="space-y-6">
     <div class="flex items-center justify-between">
-      <h1 class="text-2xl font-bold">Webhooks</h1>
+      <div>
+        <h1 class="text-xl font-semibold tracking-tight">Webhooks</h1>
+        <p class="text-sm text-muted-foreground">Notificacoes automaticas por evento</p>
+      </div>
       <Button @click="dialogOpen = true">
         <Plus class="mr-2 h-4 w-4" />
         Novo Webhook
@@ -180,7 +183,7 @@ onMounted(() => fetchConfigs())
                 {{ eventLabels[c.event_type] || c.event_type }}
               </Badge>
             </TableCell>
-            <TableCell class="max-w-xs truncate font-mono text-sm">
+            <TableCell class="max-w-xs truncate font-mono text-sm text-muted-foreground">
               {{ c.url }}
             </TableCell>
             <TableCell>
@@ -209,7 +212,7 @@ onMounted(() => fetchConfigs())
           <DialogTitle>Novo Webhook</DialogTitle>
         </DialogHeader>
         <div class="space-y-4">
-          <div class="space-y-2">
+          <div class="space-y-1.5">
             <Label>Evento</Label>
             <Select v-model="newConfig.event_type">
               <SelectTrigger>
@@ -221,7 +224,7 @@ onMounted(() => fetchConfigs())
               </SelectContent>
             </Select>
           </div>
-          <div class="space-y-2">
+          <div class="space-y-1.5">
             <Label>URL</Label>
             <Input
               v-model="newConfig.url"

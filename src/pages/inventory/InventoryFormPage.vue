@@ -57,12 +57,12 @@ onMounted(async () => {
 
 async function handleSubmit() {
   if (!form.value.item_name || !form.value.category || !form.value.quantity) {
-    toast.error('Preencha os campos obrigatorios')
+    toast.error('Preencha os campos obrigatórios')
     return
   }
 
   if (form.value.category === 'alimento' && !form.value.expiry_date) {
-    toast.error('Data de validade e obrigatoria para alimentos')
+    toast.error('Data de validade é obrigatória para alimentos')
     return
   }
 
@@ -90,17 +90,17 @@ async function handleSubmit() {
     } else {
       const { data, error } = await createItem(payload)
       if (error) {
-        toast.error(`Erro ao registrar doacao: ${error.message}`)
+        toast.error(`Erro ao registrar doação: ${error.message}`)
         return
       }
-      toast.success('Doacao registrada')
+      toast.success('Doação registrada')
 
       if (data) {
         dispatchWebhook('doacao_recebida', {
           item: data.item_name,
           category: data.category,
           quantity: data.quantity,
-          donor: data.donor_name || 'Anonimo',
+          donor: data.donor_name || 'Anônimo',
           received_date: data.received_date,
         })
       }
@@ -118,23 +118,23 @@ async function handleSubmit() {
 
 <template>
   <div class="mx-auto max-w-2xl">
-    <Card>
+    <Card class="border-t-2 border-t-[var(--stewardship)]">
       <CardHeader>
-        <CardTitle>
-          {{ isEdit ? 'Editar Item' : 'Registrar Doacao Recebida' }}
+        <CardTitle class="text-lg">
+          {{ isEdit ? 'Editar Item' : 'Registrar Doação Recebida' }}
         </CardTitle>
       </CardHeader>
       <CardContent class="space-y-4">
-        <div class="space-y-2">
+        <div class="space-y-1.5">
           <Label for="donor">Doador</Label>
           <Input
             id="donor"
             v-model="form.donor_name"
-            placeholder="Anonimo se vazio"
+            placeholder="Anônimo se vazio"
           />
         </div>
 
-        <div class="space-y-2">
+        <div class="space-y-1.5">
           <Label for="item_name">Nome do Item *</Label>
           <Input
             id="item_name"
@@ -144,7 +144,7 @@ async function handleSubmit() {
         </div>
 
         <div class="grid gap-4 sm:grid-cols-2">
-          <div class="space-y-2">
+          <div class="space-y-1.5">
             <Label>Categoria *</Label>
             <Select v-model="form.category">
               <SelectTrigger>
@@ -153,13 +153,13 @@ async function handleSubmit() {
               <SelectContent>
                 <SelectItem value="alimento">Alimento</SelectItem>
                 <SelectItem value="roupa">Roupa</SelectItem>
-                <SelectItem value="movel">Movel</SelectItem>
+                <SelectItem value="movel">Móvel</SelectItem>
                 <SelectItem value="financeiro">Financeiro</SelectItem>
               </SelectContent>
             </Select>
           </div>
 
-          <div class="space-y-2">
+          <div class="space-y-1.5">
             <Label for="quantity">Quantidade *</Label>
             <Input
               id="quantity"
@@ -171,7 +171,7 @@ async function handleSubmit() {
         </div>
 
         <div class="grid gap-4 sm:grid-cols-2">
-          <div class="space-y-2">
+          <div class="space-y-1.5">
             <Label for="received_date">Data de Recebimento *</Label>
             <Input
               id="received_date"
@@ -180,7 +180,7 @@ async function handleSubmit() {
             />
           </div>
 
-          <div class="space-y-2">
+          <div class="space-y-1.5">
             <Label for="expiry_date">
               Data de Validade
               <span v-if="form.category === 'alimento'" class="text-destructive">*</span>
@@ -193,7 +193,7 @@ async function handleSubmit() {
           </div>
         </div>
 
-        <div class="space-y-2">
+        <div class="space-y-1.5">
           <Label>Foto do Item</Label>
           <PhotoUpload
             v-model="form.photo_url"
